@@ -1,0 +1,246 @@
+[colors]
+background = ${xrdb:background:#222}
+foreground = ${xrdb:foreground:#222}
+foreground-alt = ${xrdb:color7:#222}
+primary = ${xrdb:color1:#00f}
+secondary = ${xrdb:color2:#00f}
+alert = ${xrdb:color3:#00f}
+ 
+[constants]
+height = 20
+interval = 1
+font0 = Inconsolata:pixelsize=12
+font1 = Overpass Mono:pixelsize=10
+ 
+[bar/top]
+###############################################################################
+background = #000000
+foreground = ${colors.foreground}
+
+modules-left = i3 title
+modules-center = date
+modules-right = ram backlight volume battery network
+
+font-0 = ${constants.font0}
+font-1 = ${constants.font1}
+
+monitor = "eDP1"
+fixed-center = true
+width = 100%
+height = ${constants.height}
+radius = 0.0
+padding-left = 1
+padding-right = 1
+module-margin = 0
+separator = |
+
+click-left = rofi -show drun
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+ 
+[bar/bottom]
+###############################################################################
+background = #000000
+foreground = ${colors.foreground}
+bottom = true
+
+modules-left = ether wifi vpn
+modules-center = spotify
+modules-right = temp cpu
+
+font-0 = ${constants.font0}
+font-1 = ${constants.font1}
+ 
+monitor = "eDP1"
+fixed-center = true
+width = 100%
+height = ${constants.height}
+radius = 0.0
+padding-left = 1
+padding-right = 1
+module-margin = 0
+separator = |
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+[module/i3]
+###############################################################################
+strip-wsnumbers = true
+type = internal/i3
+format = <label-state><label-mode>
+ 
+label-focused = %index%
+label-focused-foreground = #ffffff
+label-focused-background = #333333
+label-focused-underline = #ffffff
+label-focused-padding = 1
+ 
+label-unfocused = %index%
+label-unfocused-padding = 1
+ 
+label-visible = %index%
+label-visible-underline = #555555
+label-visible-padding = 1
+ 
+label-urgent = %index%
+label-urgent-foreground = #00000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 1
+ 
+[module/title]
+###############################################################################
+type = internal/xwindow
+format-padding = 1
+label-maxlen = 64
+
+[module/date]
+###############################################################################
+type = internal/date
+interval = ${constants.interval}
+date = %A, %B %d, %I:%M %P
+
+[module/ram]
+###############################################################################
+type = internal/memory
+interval = ${constants.interval}
+format = <ramp-used> <label>
+label = M:%percentage_used:2%%
+
+ramp-used-0 = ▁
+ramp-used-1 = ▂
+ramp-used-2 = ▃
+ramp-used-3 = ▄
+ramp-used-4 = ▅
+ramp-used-5 = ▆
+ramp-used-6 = ▇
+ramp-used-7 = █
+ 
+[module/backlight]
+###############################################################################
+type = internal/backlight
+interval = ${constants.interval}
+card = intel_backlight
+label = B:%percentage:2%%
+format = <ramp> <label>
+ramp-0 = ▁
+ramp-1 = ▂
+ramp-2 = ▃
+ramp-3 = ▄
+ramp-4 = ▅
+ramp-5 = ▆
+ramp-6 = ▇
+ramp-7 = █
+
+[module/volume]
+###############################################################################
+type = internal/alsa
+interval = ${constants.interval}
+master-soundcard = default
+label-volume = V:%percentage:2%%
+label-muted = V: 0%
+format-volume = <ramp-volume> <label-volume>
+format-muted = %{F#ff0000}X %{F-}<label-muted>
+ramp-volume-0 = ▁
+ramp-volume-1 = ▂
+ramp-volume-2 = ▃
+ramp-volume-3 = ▄
+ramp-volume-4 = ▅
+ramp-volume-5 = ▆
+ramp-volume-6 = ▇
+ramp-volume-7 = █
+ 
+[module/battery]
+###############################################################################
+type = internal/battery
+interval = ${constants.interval}
+#full-at = 99
+battery = BAT0
+adapter = ADP1
+poll-interval = 5
+format-charging = <ramp-capacity> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+label-charging = C:%percentage:2%%
+label-discharging = D:%percentage:2%%
+
+ramp-capacity-0 = ▁
+ramp-capacity-1 = ▂
+ramp-capacity-2 = ▃
+ramp-capacity-3 = ▄
+ramp-capacity-4 = ▅
+ramp-capacity-5 = ▆
+ramp-capacity-6 = ▇
+ramp-capacity-7 = █
+
+[module/network]
+###############################################################################
+type = internal/network
+interval = ${constants.interval}
+interface = wlp59s0
+format-connected = <ramp-signal> <label-connected>
+format-disconnected = <label-disconnected> 
+label-connected = W:%signal:2%%
+label-disconnected = X W: 0%
+label-disconnected-foreground = #ff0000
+
+ramp-signal-0 = ▁
+ramp-signal-1 = ▂
+ramp-signal-2 = ▃
+ramp-signal-3 = ▄
+ramp-signal-4 = ▅
+ramp-signal-5 = ▆
+ramp-signal-6 = ▇
+ramp-signal-7 = █
+ 
+[module/ether]
+###############################################################################
+type = internal/network
+interval = ${constants.interval}
+interface = lo
+format-connected = %{F-}E:%{F#00ff00}●%{F-}
+format-disconnected = %{F-}E:%{F#ff0000}○%{F-}
+
+[module/wifi]
+###############################################################################
+type = internal/network
+interval = ${constants.interval}
+interface = wlp59s0
+format-connected = %{F-}W:%{F#00ff00}●%{F-}<label-connected>
+format-disconnected = %{F-}W:%{F#ff0000}○%{F-}
+label-connected = %essid%%downspeed:9%
+
+[module/vpn]
+###############################################################################
+type = custom/script
+interval = ${constants.interval}
+exec = $HOME/polybar-scripts/vpn-status.sh
+click-left = $HOME/polybar-scripts/toggle-vpn.sh
+
+[module/spotify]
+###############################################################################
+type = custom/script
+interval = ${constants.interval}
+format-prefix = "Now Playing: "
+format = <label>
+exec = if [[ "$(playerctl status)" = "Playing" ]]; then playerctl metadata xesam:artist; echo -n " - "; playerctl metadata xesam:title; else echo -n ""; fi
+exec-if = [[ "$(playerctl status)" = "Playing" || "$(playerctl status)" = "Paused" ]] && echo "0"
+
+[module/temp]
+###############################################################################
+type = internal/temperature
+interval = ${constants.interval}
+thermal-zone = 0
+base-temperature = 25
+warn-temperature = 70
+format = <label>
+format-warn = <label-warn>
+label = CPU: %temperature-c%
+label-warn = CPU: %temperature-c%
+label-warn-foreground = #ff0000
+
+[module/cpu]
+###############################################################################
+type = internal/cpu
+interval = ${constants.interval}
+format = <label>
+label = N:%percentage:2%%|1:%percentage-core1:2%%|2:%percentage-core2:2%%|3:%percentage-core3:2%%|4:%percentage-core4:2%%|5:%percentage-core5:2%%|6:%percentage-core6:2%%|7:%percentage-core7:2%%|8:%percentage-core8:3%%
